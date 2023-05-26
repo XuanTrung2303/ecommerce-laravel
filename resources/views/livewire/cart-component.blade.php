@@ -19,7 +19,7 @@
                                     <strong>Success | {{ Session::get('success_message') }}</strong>
                                 </div>
                             @endif
-                            @if (Cart::count() > 0)
+                            @if (Cart::instance('cart')->count() > 0)
                                 <table class="table shopping-summery text-center clean">
                                     <thead>
                                         <tr class="main-heading">
@@ -32,10 +32,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (Cart::content() as $item)
+                                        @foreach (Cart::instance('cart')->content() as $item)
                                             <tr>
                                                 <td class="image product-thumbnail"><img
-                                                        src="{{ asset('assets/imgs/shop/product-') }}{{ $item->model->id }}-1.jpg"
+                                                        src="{{ asset('assets/imgs/products') }}/{{ $product->image }}"
                                                         alt="#">
                                                 </td>
                                                 <td class="product-des product-name">
@@ -71,7 +71,8 @@
                                         @endforeach
                                         <tr>
                                             <td colspan="6" class="text-end">
-                                                <a href="#" class="text-muted" wire:click.prevent="clearAll()"> <i class="fi-rs-cross-small"></i>
+                                                <a href="#" class="text-muted" wire:click.prevent="clearAll()"> <i
+                                                        class="fi-rs-cross-small"></i>
                                                     Clear
                                                     Cart</a>
                                             </td>
