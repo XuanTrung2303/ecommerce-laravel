@@ -3,13 +3,21 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Category;
+use Carbon\Carbon;
+use Livewire\WithFileUploads;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
 class AdminAddCategoryComponent extends Component
 {
+    use WithFileUploads;
     public $name;
+
     public $slug;
+
+    public $image;
+
+    public $is_popular;
 
     public function generateSlug()
     {
@@ -20,7 +28,9 @@ class AdminAddCategoryComponent extends Component
     {
         $this->validateOnly($fields, [
             'name' => 'required',
-            'slug' => 'required'
+            'slug' => 'required',
+            'image' => 'required',
+            'is_popular' => 'required'
         ]);
     }
 
@@ -28,11 +38,17 @@ class AdminAddCategoryComponent extends Component
     {
         $this->validate([
             'name' => 'required',
-            'slug' => 'required'
+            'slug' => 'required',
+            'image' => 'required',
+            'is_popular' => 'required'
         ]);
         $category = new Category();
         $category->name = $this->name;
         $category->slug = $this->slug;
+        $imageName = Carbon::now()->timestamp . '.' . $this->image->extension();
+        $this->image->storeAs('categories', $imageName);
+        $category->image = $imageName;
+        $category->is_popular = $this->is_popular;
         $category->save();
         session()->flash('message', 'Category has been created successfully!');
         return view('livewire.admin.admin-categories-component');
